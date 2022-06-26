@@ -23,6 +23,7 @@ const closeModal = () =>{
 }
 const closeModalEnd = ()=>{
   modalbg.style.display = "none";
+  clearForm();
   window.location.reload();
 }
 
@@ -47,10 +48,13 @@ const validateInputs = (element, errorMessage)=>{
   element.setAttribute("data-error", errorMessage);
 
 }
-//////// functions qui return false si le champ est incorrect, ou true si valide /////////////////
+//////// functions qui return false si le champ est incorrect, ou true si valide ///////////
+// champ Prénom
 const firstNameValidation = (firstNameInput)=>{
 
-  if (firstNameInput.value.length <= 1) {
+  const firstNameRegex = /^([ \u00c0-\u01ffa-zA-Z'\-])+$/
+
+  if (firstNameRegex.test(firstNameInput.value) === false && first.value.length <= 1) {
 
     validateInputs(firstNameInput.parentNode, messagesErrors.firstNameError)
   
@@ -61,10 +65,10 @@ const firstNameValidation = (firstNameInput)=>{
     return true;
  }
 }
-
+// champ nom
 const lastNameValidation = (lastNameInput)=>{
- 
- if (lastNameInput.value.length <= 1 ) {
+  const lastNameRegex = /^([ \u00c0-\u01ffa-zA-Z'\-])+$/
+ if (lastNameRegex.test(lastNameInput.value) === false && lastNameInput.value.length <= 1 ) {
 
   validateInputs(lastNameInput.parentNode, messagesErrors.lastNameError);
   return false
@@ -74,7 +78,7 @@ else{
   return true
 }
 }
-
+// champ email
 const emailValidation = (emailInput)=>{
 
   const emailRegex = /^[A-Z-a-z-0-9.-_]+[@]{1}[A-Z-a-z-0-9.-_]+[.]{1}[a-z]{2,10}$/;
@@ -89,7 +93,7 @@ const emailValidation = (emailInput)=>{
     return true;
   } 
 }
-
+// champ Date de naissance
 const birthdayValidation = (birthdayInput)=>{
   let currentDate = new Date(Date.now()).getFullYear();// on récupére la date exacte actuel
   let selectDate = new Date(Date.parse(birthdayInput.value)).getFullYear();// la date séléctionné
@@ -109,7 +113,7 @@ const birthdayValidation = (birthdayInput)=>{
     return true;
   }
 }
-
+// champ coucour
 const coucourValidation = (concourInput)=>{
 
   if( concourInput.value === ""){
@@ -127,7 +131,7 @@ const coucourValidation = (concourInput)=>{
     return true;
   }
 }
-
+// radio inputs lieux
 const locationValidation = (locationInput1,locationInput2, locationInput3, locationInput4, locationInput5, locationInput6)=>{
 
   if (locationInput1.checked 
@@ -147,7 +151,7 @@ const locationValidation = (locationInput1,locationInput2, locationInput3, locat
   
   }
 }
-
+// champ CGU
 const conditionsUserValidation = (condtionsUserInput)=>{
 
    if (condtionsUserInput.checked ) {
@@ -217,22 +221,19 @@ formSubmit.onsubmit = function(e){
   }
 }
 
+// clear toutes les valeurs apres le submit
+function clearForm(){
+
+  const cityList = document.querySelectorAll('input[name="location"]');
+  let formInputs = document.querySelectorAll('.formData input');
+  for (filledInput of formInputs){
+    filledInput.value = "";
+  }
+  for (city of cityList){
+    city.checked = false;
+  }
+
+}
 
 
 
-
-
-
-
-
-
-
-/* ce qu'il reste à faire :
-
-   - la vérification de l'age (voir le comm un peu au dessus)
-   - Ajout des bordure rouge
-   - onsubmit, la validation du formulaire en affichant le end-modal
-   - voir le truc sur le css data-error et expliquer pk et comment faire
-   - voir issues sur github, à quoi sert et pk y a des messages des gens et tout
-
-*/
